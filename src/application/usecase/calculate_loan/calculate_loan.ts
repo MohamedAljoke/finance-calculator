@@ -1,6 +1,6 @@
-import Loan, { ELoanType } from "./domain/entity/loan";
+import Loan, { ELoanType } from "../../../domain/entity/loan";
 
-export default class CalculateInterest {
+export default class CalculateLoan {
   constructor() {}
   async execute(params: InputParams): Promise<Output> {
     const { period, downPayment, totalAmount, salary } = params;
@@ -14,6 +14,8 @@ export default class CalculateInterest {
       type: ELoanType.price,
     });
     const installments = loan.calculateLoanInstallments();
+
+    console.log(installments);
     return {
       installments: installments,
     };

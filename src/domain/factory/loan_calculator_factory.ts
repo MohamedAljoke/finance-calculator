@@ -4,12 +4,13 @@ import { LoanSACCalculationStrategy } from "../service/loans_service/loan_sac";
 
 export default class LoanCalculatorFactory {
   static create(type: ELoanType) {
-    if (type === "price") {
-      return new LoanPriceCalculationStrategy();
+    switch (type) {
+      case ELoanType.price:
+        return new LoanPriceCalculationStrategy();
+      case ELoanType.sac:
+        return new LoanSACCalculationStrategy();
+      default:
+        throw new Error("Invalid loan type");
     }
-    if (type === "sac") {
-      return new LoanSACCalculationStrategy();
-    }
-    throw new Error("method not implemented");
   }
 }
