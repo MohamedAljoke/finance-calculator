@@ -3,30 +3,37 @@ import Loan, { ELoanType } from "../../../domain/entity/loan";
 export default class CalculateLoan {
   constructor() {}
   async execute(params: InputParams): Promise<Output> {
-    const { period, downPayment, totalAmount, salary } = params;
+    const { periodInMonths, interestRatePercentage, downPayment, totalAmount } =
+      params;
     const amount = totalAmount - downPayment;
-    const loanRate = 1;
-    const loan = new Loan({
-      period,
+    const loanRate = interestRatePercentage / 100;
+    const sacLoan = new Loan({
+      period: periodInMonths,
       amount,
-      salary,
+      rate: loanRate,
+      type: ELoanType.sac,
+    });
+    const priceLoan = new Loan({
+      period: periodInMonths,
+      amount,
       rate: loanRate,
       type: ELoanType.price,
     });
-    const installments = loan.calculateLoanInstallments();
+    const installmentsSac = sacLoan.installments;
+    const installmentsPrice = priceLoan.installments;
 
-    console.log(installments);
+    console.log(sacLoan.getTotalAmounts(), priceLoan.getTotalAmounts());
     return {
-      installments: installments,
+      installments: installmentsSac,
     };
   }
 }
 
 type InputParams = {
-  period: number;
+  periodInMonths: number;
   downPayment: number;
-  salary: number;
   totalAmount: number;
+  interestRatePercentage: number;
 };
 type Output = {
   installments: InstallmentOutput[];

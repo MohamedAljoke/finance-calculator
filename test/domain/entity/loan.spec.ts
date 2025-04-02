@@ -16,19 +16,5 @@ describe("Loan", () => {
     expect(loan.period).toBe(loanData.period);
     expect(loan.rate).toBe(loanData.rate);
     expect(loan.type).toBe(loanData.type);
-    expect(loan.salary).toBe(loanData.salary);
-  });
-  it("should throw an error if salary is insufficient for the loan", () => {
-    const loanData = {
-      amount: 10000,
-      period: 6,
-      rate: 0.05,
-      type: ELoanType.price,
-      salary: 2000,
-    };
-
-    expect(() => {
-      new Loan(loanData);
-    }).toThrow("Insufficient salary");
   });
 });

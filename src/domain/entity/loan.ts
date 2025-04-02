@@ -11,34 +11,44 @@ export default class Loan {
   readonly period: number;
   readonly rate: number;
   readonly type: ELoanType;
-  readonly salary: number;
+  readonly installments: Installment[];
+
   constructor({
     amount,
     period,
     rate,
     type,
-    salary,
   }: {
     amount: number;
     period: number;
     rate: number;
     type: ELoanType;
-    salary: number;
   }) {
     this.amount = amount;
     this.period = period;
     this.rate = rate;
     this.type = type;
-    this.salary = salary;
-    this.validateSalaryLoanRelation();
-  }
-  validateSalaryLoanRelation() {
-    if (this.salary * 0.25 < this.amount / this.period) {
-      throw new Error("Insufficient salary");
-    }
+    this.installments = this.calculateLoanInstallments();
   }
 
-  calculateLoanInstallments(): Installment[] {
+  public getTotalAmounts() {
+    const totals = this.installments.reduce(
+      (acc, installment) => {
+        acc.amortization += installment.amortization;
+        acc.interest += installment.interest;
+        acc.amount += installment.amount;
+        return acc;
+      },
+      { amortization: 0, interest: 0, amount: 0 }
+    );
+
+    return {
+      totalAmortization: parseFloat(totals.amortization.toFixed(2)),
+      totalInterest: parseFloat(totals.interest.toFixed(2)),
+      totalLoan: parseFloat(totals.amount.toFixed(2)),
+    };
+  }
+  private calculateLoanInstallments(): Installment[] {
     const loanCalculator = LoanCalculatorFactory.create(this.type);
     const installments = loanCalculator.calculate(this);
     return installments;

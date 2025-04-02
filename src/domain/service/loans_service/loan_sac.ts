@@ -4,24 +4,29 @@ import { LoanCalculationStrategy } from "./loan_calculation_strategy";
 
 export class LoanSACCalculationStrategy implements LoanCalculationStrategy {
   calculate(loan: Loan): Installment[] {
-    const { amount, period } = loan;
-    const amortization = amount / period;
-    let balance = amount;
+    const { rate, period, amount } = loan;
     const installments: Installment[] = [];
 
-    for (let i = 1; i <= period; i++) {
-      const interest = balance * 0.01; // Juros de 1% ao mês
-      const amount = amortization + interest;
-      balance -= amortization;
-
-      installments.push({
-        installmentNumber: i,
-        amount: parseFloat(amount.toFixed(2)),
-        interest: parseFloat(interest.toFixed(2)),
-        amortization: parseFloat(amortization.toFixed(2)),
-        balance: parseFloat(balance.toFixed(2)),
-      });
+    let balance = amount;
+    let amortization = balance / period;
+    while (balance > 0) {
+      let initialBalance = balance;
+      let interest = initialBalance * rate;
+      let updatedBalance = initialBalance + interest;
+      let installmentPayment = interest + amortization;
+      balance = updatedBalance - installmentPayment;
+      if (balance <= 0.05) balance = 0;
+      installments.push(
+        new Installment({
+          installmentNumber: installments.length + 1,
+          amount: parseFloat(installmentPayment.toFixed(2)),
+          interest: parseFloat(interest.toFixed(2)),
+          amortization: parseFloat(amortization.toFixed(2)),
+          balance: parseFloat(balance.toFixed(2)),
+        })
+      );
     }
+
     return installments;
   }
 }

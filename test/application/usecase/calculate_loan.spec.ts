@@ -4,12 +4,12 @@ describe("Request loan", () => {
   it("should be able to request loan", async () => {
     const calculateLoan = new CalculateLoan();
     const params = {
-      period: 360,
+      periodInMonths: 360,
+      interestRatePercentage: 1,
       downPayment: 100000,
-      salary: 5000,
       totalAmount: 350000,
     };
     const output = await calculateLoan.execute(params);
-    expect(output.installments).toHaveLength(params.period);
+    expect(output.installments).toHaveLength(params.periodInMonths);
   });
 });
