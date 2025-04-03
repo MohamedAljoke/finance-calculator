@@ -18,17 +18,20 @@ export default class Loan {
     period,
     rate,
     type,
+    extraPayments,
   }: {
     amount: number;
     period: number;
     rate: number;
     type: ELoanType;
+    extraPayments?: Record<number, number>;
   }) {
     this.amount = amount;
     this.period = period;
     this.rate = rate;
     this.type = type;
-    this.installments = this.calculateLoanInstallments();
+
+    this.installments = this.calculateLoanInstallments(extraPayments);
   }
 
   public getTotalAmounts() {
@@ -48,9 +51,11 @@ export default class Loan {
       totalLoan: parseFloat(totals.amount.toFixed(2)),
     };
   }
-  private calculateLoanInstallments(): Installment[] {
+  private calculateLoanInstallments(
+    extraPayments?: Record<number, number>
+  ): Installment[] {
     const loanCalculator = LoanCalculatorFactory.create(this.type);
-    const installments = loanCalculator.calculate(this);
+    const installments = loanCalculator.calculate(this, extraPayments);
     return installments;
   }
 }

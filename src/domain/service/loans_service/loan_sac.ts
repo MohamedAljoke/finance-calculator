@@ -3,7 +3,7 @@ import Loan from "../../entity/loan";
 import { LoanCalculationStrategy } from "./loan_calculation_strategy";
 
 export class LoanSACCalculationStrategy implements LoanCalculationStrategy {
-  calculate(loan: Loan): Installment[] {
+  calculate(loan: Loan, extraPayments?: Record<number, number>): Installment[] {
     const { rate, period, amount } = loan;
     const installments: Installment[] = [];
 
@@ -14,6 +14,10 @@ export class LoanSACCalculationStrategy implements LoanCalculationStrategy {
       let interest = initialBalance * rate;
       let updatedBalance = initialBalance + interest;
       let installmentPayment = interest + amortization;
+      if (extraPayments?.[installments.length + 1]) {
+        updatedBalance -= extraPayments[installments.length + 1];
+      }
+
       balance = updatedBalance - installmentPayment;
       if (balance <= 0.05) balance = 0;
       installments.push(
