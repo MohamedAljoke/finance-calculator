@@ -1,4 +1,4 @@
-import LoanCalculatorFactory from "../factory/loan_calculator_factory";
+import LoanCalculatorFactory from "../../factory/loan_calculator_factory";
 import Installment from "./installment";
 
 export enum ELoanType {

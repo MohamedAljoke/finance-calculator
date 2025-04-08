@@ -1,4 +1,4 @@
-import Loan, { ELoanType } from "../../../../src/domain/entity/loan";
+import Loan, { ELoanType } from "../../../../src/domain/entity/loan/loan";
 import { LoanSACCalculationStrategy } from "../../../../src/domain/service/loans_service/loan_sac";
 
 describe("loan price method", () => {

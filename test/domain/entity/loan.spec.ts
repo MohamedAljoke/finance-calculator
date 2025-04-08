@@ -1,4 +1,4 @@
-import Loan, { ELoanType } from "../../../src/domain/entity/loan";
+import Loan, { ELoanType } from "../../../src/domain/entity/loan/loan";
 
 describe("Loan", () => {
   it("should be able to create a loan", () => {

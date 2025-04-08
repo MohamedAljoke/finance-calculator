@@ -1,4 +1,4 @@
-import Loan, { ELoanType } from "../../../domain/entity/loan";
+import Loan, { ELoanType } from "../../../domain/entity/loan/loan";
 
 export default class CalculateLoan {
   constructor() {}
@@ -21,7 +21,7 @@ export default class CalculateLoan {
     });
     const installmentsSac = sacLoan.installments;
     const installmentsPrice = priceLoan.installments;
-
+    console.log(installmentsSac);
     console.log(sacLoan.getTotalAmounts(), priceLoan.getTotalAmounts());
     return {
       installments: installmentsSac,
